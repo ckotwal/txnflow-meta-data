@@ -1,0 +1,36 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "application",
+            "otherEntityName": "flowApplicationSequence",
+            "otherEntityRelationshipName": "flow"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "group",
+            "otherEntityName": "transactionFlowGroup",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "lOB",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "flowCorrelationId",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180817172043",
+    "entityTableName": "transaction_flow",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}

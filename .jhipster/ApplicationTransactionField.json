@@ -1,0 +1,40 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "application",
+            "otherEntityName": "applicationTransaction",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "applicationOverride",
+            "otherEntityName": "flowApplicationSequence",
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "isIdentifier",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "filterValue",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "isOutput",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20180817172046",
+    "entityTableName": "application_transaction_field",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}

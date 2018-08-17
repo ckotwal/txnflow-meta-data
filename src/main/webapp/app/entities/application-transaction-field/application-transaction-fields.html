@@ -1,0 +1,70 @@
+<div>
+    <h2>Application Transaction Fields</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="application-transaction-field.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span >
+                        Create new Application Transaction Field
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Name</span></th>
+                    <th><span>Is Identifier</span></th>
+                    <th><span>Filter Value</span></th>
+                    <th><span>Is Output</span></th>
+                    <th><span>Application</span></th>
+                    <th><span>Application Override</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="applicationTransactionField in vm.applicationTransactionFields track by applicationTransactionField.id">
+                    <td><a ui-sref="application-transaction-field-detail({id:applicationTransactionField.id})">{{applicationTransactionField.id}}</a></td>
+                    <td>{{applicationTransactionField.name}}</td>
+                    <td>{{applicationTransactionField.isIdentifier}}</td>
+                    <td>{{applicationTransactionField.filterValue}}</td>
+                    <td>{{applicationTransactionField.isOutput}}</td>
+                    <td>
+                        <a ui-sref="application-transaction-detail({id:applicationTransactionField.application.id})">{{applicationTransactionField.application.name}}</a>
+                    </td>
+                    <td>
+                        <a ui-sref="flow-application-sequence-detail({id:applicationTransactionField.applicationOverride.id})">{{applicationTransactionField.applicationOverride.name}}</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="application-transaction-field-detail({id:applicationTransactionField.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="application-transaction-field.edit({id:applicationTransactionField.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="application-transaction-field.delete({id:applicationTransactionField.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

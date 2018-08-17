@@ -1,0 +1,49 @@
+
+
+entity TransactionFlowGroup {
+	name String
+}
+entity TransactionFlow {
+	LOB String,
+	name String,
+	flowCorrelationId String
+}
+
+enum EventRepositoryType {
+    DP
+  }
+
+
+entity ApplicationTransaction {
+	name String,
+    eventCount Long,
+	eventRepositoryType EventRepositoryType,
+	repositoryEventName String
+}
+
+entity FlowApplicationSequence {
+    appSequence Integer,
+    name String
+
+}
+
+
+entity ApplicationTransactionField {
+	name String,
+    isIdentifier Boolean,
+    filterValue String,
+    isOutput Boolean
+}
+relationship OneToMany {
+  TransactionFlowGroup{flow} to TransactionFlow{group},
+  TransactionFlow{application} to FlowApplicationSequence{flow(name)},
+  ApplicationTransaction{flow} to FlowApplicationSequence{application(name)},
+  ApplicationTransaction{field} to ApplicationTransactionField{application(name)},
+  FlowApplicationSequence{field} to ApplicationTransactionField{applicationOverride(name)}
+
+}
+
+
+
+
+

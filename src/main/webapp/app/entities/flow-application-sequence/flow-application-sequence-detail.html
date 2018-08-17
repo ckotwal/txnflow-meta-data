@@ -1,0 +1,35 @@
+
+<div>
+    <h2><span>Flow Application Sequence</span> {{vm.flowApplicationSequence.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>App Sequence</span></dt>
+        <dd>
+            <span>{{vm.flowApplicationSequence.appSequence}}</span>
+        </dd>
+        <dt><span>Name</span></dt>
+        <dd>
+            <span>{{vm.flowApplicationSequence.name}}</span>
+        </dd>
+        <dt><span>Flow</span></dt>
+        <dd>
+            <a ui-sref="transaction-flow-detail({id:vm.flowApplicationSequence.flow.id})">{{vm.flowApplicationSequence.flow.name}}</a>
+        </dd>
+        <dt><span>Application</span></dt>
+        <dd>
+            <a ui-sref="application-transaction-detail({id:vm.flowApplicationSequence.application.id})">{{vm.flowApplicationSequence.application.name}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="flow-application-sequence-detail.edit({id:vm.flowApplicationSequence.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down"> Edit</span>
+    </button>
+</div>

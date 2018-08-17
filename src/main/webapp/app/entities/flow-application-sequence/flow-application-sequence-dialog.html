@@ -1,0 +1,50 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myFlowApplicationSequenceLabel">Create or edit a Flow Application Sequence</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.flowApplicationSequence.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.flowApplicationSequence.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_appSequence">App Sequence</label>
+            <input type="number" class="form-control" name="appSequence" id="field_appSequence"
+                    ng-model="vm.flowApplicationSequence.appSequence"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_name">Name</label>
+            <input type="text" class="form-control" name="name" id="field_name"
+                    ng-model="vm.flowApplicationSequence.name"
+                    />
+        </div>
+
+        <div class="form-group">
+            <label for="field_flow">Flow</label>
+            <select class="form-control" id="field_flow" name="flow" ng-model="vm.flowApplicationSequence.flow" ng-options="transactionFlow as transactionFlow.name for transactionFlow in vm.transactionflows track by transactionFlow.id">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_application">Application</label>
+            <select class="form-control" id="field_application" name="application" ng-model="vm.flowApplicationSequence.application" ng-options="applicationTransaction as applicationTransaction.name for applicationTransaction in vm.applicationtransactions track by applicationTransaction.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

@@ -1,0 +1,41 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "flow",
+            "otherEntityName": "flowApplicationSequence",
+            "otherEntityRelationshipName": "application"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "field",
+            "otherEntityName": "applicationTransactionField",
+            "otherEntityRelationshipName": "application"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "eventCount",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "eventRepositoryType",
+            "fieldType": "EventRepositoryType",
+            "fieldValues": "DP"
+        },
+        {
+            "fieldName": "repositoryEventName",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180817172044",
+    "entityTableName": "application_transaction",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}

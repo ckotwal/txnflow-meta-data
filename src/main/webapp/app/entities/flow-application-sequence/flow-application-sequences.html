@@ -1,0 +1,66 @@
+<div>
+    <h2>Flow Application Sequences</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="flow-application-sequence.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span >
+                        Create new Flow Application Sequence
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>App Sequence</span></th>
+                    <th><span>Name</span></th>
+                    <th><span>Flow</span></th>
+                    <th><span>Application</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="flowApplicationSequence in vm.flowApplicationSequences track by flowApplicationSequence.id">
+                    <td><a ui-sref="flow-application-sequence-detail({id:flowApplicationSequence.id})">{{flowApplicationSequence.id}}</a></td>
+                    <td>{{flowApplicationSequence.appSequence}}</td>
+                    <td>{{flowApplicationSequence.name}}</td>
+                    <td>
+                        <a ui-sref="transaction-flow-detail({id:flowApplicationSequence.flow.id})">{{flowApplicationSequence.flow.name}}</a>
+                    </td>
+                    <td>
+                        <a ui-sref="application-transaction-detail({id:flowApplicationSequence.application.id})">{{flowApplicationSequence.application.name}}</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="flow-application-sequence-detail({id:flowApplicationSequence.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="flow-application-sequence.edit({id:flowApplicationSequence.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="flow-application-sequence.delete({id:flowApplicationSequence.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "field",
+            "otherEntityName": "applicationTransactionField",
+            "otherEntityRelationshipName": "applicationOverride"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "flow",
+            "otherEntityName": "transactionFlow",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "application",
+            "otherEntityName": "applicationTransaction",
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "appSequence",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180817172045",
+    "entityTableName": "flow_application_sequence",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}

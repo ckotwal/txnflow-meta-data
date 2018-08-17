@@ -1,0 +1,35 @@
+
+<div>
+    <h2><span>Transaction Flow</span> {{vm.transactionFlow.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>L OB</span></dt>
+        <dd>
+            <span>{{vm.transactionFlow.lOB}}</span>
+        </dd>
+        <dt><span>Name</span></dt>
+        <dd>
+            <span>{{vm.transactionFlow.name}}</span>
+        </dd>
+        <dt><span>Flow Correlation Id</span></dt>
+        <dd>
+            <span>{{vm.transactionFlow.flowCorrelationId}}</span>
+        </dd>
+        <dt><span>Group</span></dt>
+        <dd>
+            <a ui-sref="transaction-flow-group-detail({id:vm.transactionFlow.group.id})">{{vm.transactionFlow.group.id}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="transaction-flow-detail.edit({id:vm.transactionFlow.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down"> Edit</span>
+    </button>
+</div>
