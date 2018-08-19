@@ -2,7 +2,14 @@ package com.bnymellon.txnflow.metadata.web.rest;
 
 import com.bnymellon.txnflow.metadata.TxnMetaDataApp;
 
+import com.bnymellon.txnflow.metadata.domain.ApplicationTransaction;
+import com.bnymellon.txnflow.metadata.domain.ApplicationTransactionField;
+import com.bnymellon.txnflow.metadata.domain.FlowApplicationSequence;
 import com.bnymellon.txnflow.metadata.domain.TransactionFlow;
+import com.bnymellon.txnflow.metadata.domain.enumeration.EventRepositoryType;
+import com.bnymellon.txnflow.metadata.repository.ApplicationTransactionFieldRepository;
+import com.bnymellon.txnflow.metadata.repository.ApplicationTransactionRepository;
+import com.bnymellon.txnflow.metadata.repository.FlowApplicationSequenceRepository;
 import com.bnymellon.txnflow.metadata.repository.TransactionFlowRepository;
 import com.bnymellon.txnflow.metadata.web.rest.errors.ExceptionTranslator;
 
@@ -22,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -45,9 +54,24 @@ public class TransactionFlowResourceIntTest {
 
     private static final String DEFAULT_FLOW_CORRELATION_ID = "AAAAAAAAAA";
     private static final String UPDATED_FLOW_CORRELATION_ID = "BBBBBBBBBB";
+    public static final String STIF_CASH_LEG = "STIF Cash Leg";
+    public static final String GSP = "GSP";
+    public static final String FIELD_1 = "field1";
+    public static final String FIELD_2 = "field2";
+    public static final String FIELD_3 = "field3";
+    public static final String FIELD_4 = "field4";
 
     @Autowired
     private TransactionFlowRepository transactionFlowRepository;
+
+    @Autowired
+    private ApplicationTransactionRepository applicationTransactionRepository;
+
+    @Autowired
+    private ApplicationTransactionFieldRepository applicationTransactionFieldRepository;
+
+    @Autowired
+    private FlowApplicationSequenceRepository flowApplicationSequenceRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -234,6 +258,93 @@ public class TransactionFlowResourceIntTest {
         // Validate the database is empty
         List<TransactionFlow> transactionFlowList = transactionFlowRepository.findAll();
         assertThat(transactionFlowList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void retrieveRegularApplicationFields() {
+        setupTransactionFlowFields();
+        Set<TransactionFlow> applicationFields = transactionFlowRepository.findApplicationFields(STIF_CASH_LEG);
+        TransactionFlow transactionFlow = applicationFields.iterator().next();
+        FlowApplicationSequence flowSequence = transactionFlow.getApplications().iterator().next();
+        ApplicationTransaction application = flowSequence.getApplication();
+        assertThat(application.getName()).isEqualTo(GSP);
+        assertThat(application.getFields().stream()
+            .map(f -> f.getName())
+            .collect(Collectors.toList()))
+            .containsExactlyInAnyOrder(
+                FIELD_1,
+                FIELD_2);
+    }
+
+    private void setupTransactionFlowFields() {
+        ApplicationTransactionField applicationTransactionField1 = new ApplicationTransactionField()
+                                                                    .name(FIELD_1).filterValue("$input");
+        ApplicationTransactionField applicationTransactionField2 = new ApplicationTransactionField()
+            .name(FIELD_2).filterValue("1234");
+
+
+        ApplicationTransaction applicationTransaction = new ApplicationTransaction()
+            .name(GSP).eventRepositoryType(EventRepositoryType.DP).eventCount(1L).
+            addField(applicationTransactionField1).addField(applicationTransactionField2);
+        applicationTransactionRepository.save(applicationTransaction);
+
+        applicationTransactionFieldRepository.save(applicationTransactionField1);
+        applicationTransactionFieldRepository.save(applicationTransactionField2);
+        TransactionFlow transactionFlow = new TransactionFlow().name(STIF_CASH_LEG);
+
+
+        FlowApplicationSequence flowApplicationSequence = new FlowApplicationSequence().appSequence(1);
+        transactionFlow.addApplication(flowApplicationSequence);
+        applicationTransaction.addFlow(flowApplicationSequence);
+        transactionFlowRepository.saveAndFlush(transactionFlow);
+        flowApplicationSequenceRepository.saveAndFlush(flowApplicationSequence);
+
+    }
+
+    @Test
+    @Transactional
+    public void retrieveOverrideApplicationFields() {
+        setupTransactionFlowOverrideFields();
+        Set<TransactionFlow> transactionFlows = transactionFlowRepository.findFlowOverrideFields(STIF_CASH_LEG);
+        TransactionFlow transactionFlow = transactionFlows.iterator().next();
+        FlowApplicationSequence flowSequence = transactionFlow.getApplications().iterator().next();
+        ApplicationTransaction application = flowSequence.getApplication();
+        assertThat(application.getName()).isEqualTo(GSP);
+        assertThat(flowSequence.getFields().stream()
+            .map(f -> f.getName())
+            .collect(Collectors.toList()))
+            .containsExactlyInAnyOrder(
+                FIELD_3,
+                FIELD_4);
+    }
+
+    private void setupTransactionFlowOverrideFields() {
+        ApplicationTransactionField applicationTransactionField1 = new ApplicationTransactionField()
+            .name(FIELD_3).filterValue("$flow.GTM.2.corrId");
+        ApplicationTransactionField applicationTransactionField2 = new ApplicationTransactionField()
+            .name(FIELD_4).filterValue("$input");
+
+
+        ApplicationTransaction applicationTransaction = new ApplicationTransaction()
+            .name(GSP).eventRepositoryType(EventRepositoryType.DP).eventCount(1L);
+
+        applicationTransactionFieldRepository.saveAndFlush(applicationTransactionField1);
+        applicationTransactionFieldRepository.saveAndFlush(applicationTransactionField2);
+        applicationTransactionRepository.save(applicationTransaction);
+
+        TransactionFlow transactionFlow = new TransactionFlow().name(STIF_CASH_LEG);
+
+       transactionFlowRepository.saveAndFlush(transactionFlow);
+        FlowApplicationSequence flowApplicationSequence = new FlowApplicationSequence().appSequence(1)
+            .addField(applicationTransactionField1).addField(applicationTransactionField2);
+        flowApplicationSequenceRepository.saveAndFlush(flowApplicationSequence);
+
+        transactionFlow.addApplication(flowApplicationSequence);
+        applicationTransaction.addFlow(flowApplicationSequence);
+        //transactionFlowRepository.saveAndFlush(transactionFlow);
+
+
     }
 
     @Test
