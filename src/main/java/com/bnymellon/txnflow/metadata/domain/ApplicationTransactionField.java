@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.AbstractMap;
 import java.util.Objects;
 
 /**
@@ -119,6 +120,14 @@ public class ApplicationTransactionField implements Serializable {
     public ApplicationTransactionField applicationOverride(FlowApplicationSequence flowApplicationSequence) {
         this.applicationOverride = flowApplicationSequence;
         return this;
+    }
+
+    public AbstractMap.SimpleImmutableEntry<String, String> buildFilter(String input) {
+        if (isIdentifier) {
+            String filterValue = ("$input".equals(getFilterValue()))? input: getFilterValue();
+            return new AbstractMap.SimpleImmutableEntry<String, String>(getName(), filterValue);
+        }
+        return null;
     }
 
     public void setApplicationOverride(FlowApplicationSequence flowApplicationSequence) {

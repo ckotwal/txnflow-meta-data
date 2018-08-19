@@ -1,14 +1,14 @@
 package com.bnymellon.txnflow.metadata.domain;
 
+import com.bnymellon.txnflow.metadata.service.dto.ApplicationMetadataDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A FlowApplicationSequence.
@@ -75,6 +75,10 @@ public class FlowApplicationSequence implements Serializable {
         this.name = name;
     }
 
+    public String getKey() {
+        return application.getName() + "-" + getAppSequence();
+    }
+
     public Set<ApplicationTransactionField> getFields() {
         return fields;
     }
@@ -124,6 +128,29 @@ public class FlowApplicationSequence implements Serializable {
 
     public void setApplication(ApplicationTransaction applicationTransaction) {
         this.application = applicationTransaction;
+    }
+
+    public Set<ApplicationTransactionField> getEffectiveFields() {
+        if(this.getFields() != null && !this.getFields().isEmpty()) {
+            return this.getFields();
+        }
+        return this.getApplication().getFields();
+    }
+
+    public ApplicationMetadataDTO toDTO(String input, int timeout) {
+        ApplicationMetadataDTO dto = new ApplicationMetadataDTO(getApplication().getName(),
+                                    getAppSequence(), getApplication().getRepositoryEventName(),
+                                    timeout );
+        List<String> fields = getEffectiveFields().stream()
+            .map(f -> f.getName())
+            .collect(Collectors.toList());
+        dto.setFields(fields);
+        Map<String, String> filters = getEffectiveFields().stream()
+            .filter(f -> f.isIsIdentifier())
+            .map(f -> f.buildFilter(input))
+            .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+        dto.setFilters(filters);
+        return dto;
     }
 
     @Override

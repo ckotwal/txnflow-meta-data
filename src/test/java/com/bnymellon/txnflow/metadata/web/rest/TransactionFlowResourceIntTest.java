@@ -264,8 +264,8 @@ public class TransactionFlowResourceIntTest {
     @Transactional
     public void retrieveRegularApplicationFields() {
         setupTransactionFlowFields();
-        Set<TransactionFlow> applicationFields = transactionFlowRepository.findApplicationFields(STIF_CASH_LEG);
-        TransactionFlow transactionFlow = applicationFields.iterator().next();
+        TransactionFlow transactionFlow = transactionFlowRepository.findApplicationFields(STIF_CASH_LEG);
+        //TransactionFlow transactionFlow = applicationFields.iterator().next();
         FlowApplicationSequence flowSequence = transactionFlow.getApplications().iterator().next();
         ApplicationTransaction application = flowSequence.getApplication();
         assertThat(application.getName()).isEqualTo(GSP);
@@ -306,8 +306,7 @@ public class TransactionFlowResourceIntTest {
     @Transactional
     public void retrieveOverrideApplicationFields() {
         setupTransactionFlowOverrideFields();
-        Set<TransactionFlow> transactionFlows = transactionFlowRepository.findFlowOverrideFields(STIF_CASH_LEG);
-        TransactionFlow transactionFlow = transactionFlows.iterator().next();
+        TransactionFlow transactionFlow = transactionFlowRepository.findFlowOverrideFields(STIF_CASH_LEG);
         FlowApplicationSequence flowSequence = transactionFlow.getApplications().iterator().next();
         ApplicationTransaction application = flowSequence.getApplication();
         assertThat(application.getName()).isEqualTo(GSP);
