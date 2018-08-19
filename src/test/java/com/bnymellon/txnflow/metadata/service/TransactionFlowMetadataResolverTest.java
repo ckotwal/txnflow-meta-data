@@ -75,14 +75,16 @@ public class TransactionFlowMetadataResolverTest {
     }
 
     public void buildApplicationTransactionFlowWithAppFields(TransactionFlow flow) {
-        ApplicationTransaction gspapplicationTransaction = new ApplicationTransaction().name("GSP").eventCount(1L);
+        ApplicationTransaction gspapplicationTransaction = new ApplicationTransaction().name("GSP").eventCount(1L)
+            .repositoryEventName("IDX_GSP");
         ApplicationTransactionField applicationTransactionField1 = new ApplicationTransactionField().name("fgsp1")
             .isIdentifier(true).filterValue("$input");
         ApplicationTransactionField applicationTransactionField2 = new ApplicationTransactionField().name("fgsp2")
             .isIdentifier(false);
         gspapplicationTransaction.addField(applicationTransactionField1).addField(applicationTransactionField2);
 
-        ApplicationTransaction gtmapplicationTransaction = new ApplicationTransaction().name("GTM").eventCount(1L);
+        ApplicationTransaction gtmapplicationTransaction = new ApplicationTransaction().name("GTM").eventCount(1L)
+            .repositoryEventName("IDX_GTM");
         ApplicationTransactionField gtmapplicationTransactionField = new ApplicationTransactionField().name(FGTM_1)
             .isIdentifier(true).filterValue("$input");
         gtmapplicationTransaction.addField(gtmapplicationTransactionField);
@@ -102,7 +104,7 @@ public class TransactionFlowMetadataResolverTest {
         FlowApplicationSequence flowApplicationSequence2 = new FlowApplicationSequence().appSequence(2)
             .addField(overrideapplicationTransactionField1);
         flow.addApplication(flowApplicationSequence2);
-        ApplicationTransaction gspapplicationTransaction = new ApplicationTransaction().name("GSP").eventCount(1L);
+        ApplicationTransaction gspapplicationTransaction = new ApplicationTransaction().name("GSP").eventCount(1L).repositoryEventName("IDX_GSP");
         gspapplicationTransaction.addFlow(flowApplicationSequence2);
 
 
