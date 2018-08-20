@@ -17,6 +17,8 @@ import java.util.Objects;
 public class ApplicationTransactionField implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    public static final String TF_INPUT = "$input";
+    public static final String FLOW_TAG = "$flow";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -124,8 +126,37 @@ public class ApplicationTransactionField implements Serializable {
 
     public AbstractMap.SimpleImmutableEntry<String, String> buildFilter(String input) {
         if (isIdentifier) {
-            String filterValue = ("$input".equals(getFilterValue()))? input: getFilterValue();
+            String filterValue = (TF_INPUT.equals(getFilterValue()))? input: getFilterValue();
             return new AbstractMap.SimpleImmutableEntry<String, String>(getName(), filterValue);
+        }
+        return null;
+    }
+
+    public boolean hasPredecessors() {
+        return (isIdentifier && getFilterValue().startsWith(FLOW_TAG));
+    }
+
+    public String buildPredecessorNodeKey(){
+        // The filterValue has the format $flow.appTransactionName.appSequence.appTransactionFieldName
+        // This method will then return appTransactionName.appSequence
+        if(hasPredecessors()) {
+            String[] parts = getFilterValue().split("\\.");
+            if(parts.length ==4) {
+                return  parts[1] + "." + parts[2];
+            }
+        }
+        return null;
+    }
+
+    public AbstractMap.SimpleImmutableEntry<String, String> buildPredecessorNodeFields() {
+        // The filterValue has the format $flow.appTransactionName.appSequence.appTransactionFieldName
+        // This method will then return {appTransactionName.appSequence->appTransactionFieldName}
+        if(hasPredecessors()) {
+            String[] parts = getFilterValue().split("\\.");
+            if(parts.length ==4) {
+                return new AbstractMap.SimpleImmutableEntry<String, String>(
+                    parts[1] + "." + parts[2], parts[3]);
+            }
         }
         return null;
     }

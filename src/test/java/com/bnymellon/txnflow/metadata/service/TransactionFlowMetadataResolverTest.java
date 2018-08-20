@@ -42,9 +42,9 @@ public class TransactionFlowMetadataResolverTest {
     }
     @Test
     public void resolveMetdataFor() throws Exception {
-        TransactionFlow transactionFlow1 = new TransactionFlow().name("flow1") ;
+        TransactionFlow transactionFlow1 = new TransactionFlow().name("flow1").flowCorrelationId("corrId") ;
         buildApplicationTransactionFlowWithAppFields(transactionFlow1);
-        TransactionFlow transactionFlow2 = new TransactionFlow().name("flow1");
+        TransactionFlow transactionFlow2 = new TransactionFlow().name("flow1").flowCorrelationId("corrId");
         buildApplicationTransactionFlowWithOverrideFields(transactionFlow2);
 
         ApplicationMetadataDTO gtmapplicationMetadataDTO = new ApplicationMetadataDTO("GTM",1,

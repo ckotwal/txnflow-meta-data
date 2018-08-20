@@ -43,7 +43,6 @@ public class TransactionFlowMetadataResolver {
             Collectors.toMap(FlowApplicationSequence::getKey, fas -> fas));
 
         nodeToFields.putAll(nodeToOverriddenFields);
-
         return new TransactionFlowMetadataDTO(flowName,buildApplicationDTO(transactionFlowId, nodeToFields) );
 
     }

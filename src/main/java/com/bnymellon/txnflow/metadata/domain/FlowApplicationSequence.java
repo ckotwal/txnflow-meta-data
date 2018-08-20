@@ -131,7 +131,7 @@ public class FlowApplicationSequence implements Serializable {
     }
 
     public Set<ApplicationTransactionField> getEffectiveFields() {
-        if(this.getFields() != null && !this.getFields().isEmpty()) {
+        if (this.getFields() != null && !this.getFields().isEmpty()) {
             return this.getFields();
         }
         return this.getApplication().getFields();
@@ -139,18 +139,44 @@ public class FlowApplicationSequence implements Serializable {
 
     public ApplicationMetadataDTO toDTO(String input, int timeout) {
         ApplicationMetadataDTO dto = new ApplicationMetadataDTO(getApplication().getName(),
-                                    getAppSequence(), getApplication().getRepositoryEventName(),
-                                    timeout );
-        List<String> fields = getEffectiveFields().stream()
-            .map(f -> f.getName())
-            .collect(Collectors.toList());
-        dto.setFields(fields);
+            getAppSequence(), getApplication().getRepositoryEventName(),
+            timeout);
+        buildFields(dto);
+        buildFilters(input, dto);
+        buildPredecessorNodes(dto);
+        buildPredecessorNodeFields(dto);
+        return dto;
+    }
+
+    private void buildPredecessorNodeFields(ApplicationMetadataDTO dto) {
+        Map<String, String> predecessorNodeKeyFields = getEffectiveFields().stream()
+            .filter(f -> f.hasPredecessors())
+            .map(f -> f.buildPredecessorNodeFields())
+            .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+        dto.setPredecessorNodesFields(predecessorNodeKeyFields);
+    }
+
+    private void buildPredecessorNodes(ApplicationMetadataDTO dto) {
+        Set<String> predecessorNodeKeys = getEffectiveFields().stream()
+            .filter(f -> f.hasPredecessors())
+            .map(f -> f.buildPredecessorNodeKey())
+            .collect(Collectors.toSet());
+        dto.setPredecessorNodes(new ArrayList(predecessorNodeKeys));
+    }
+
+    private void buildFilters(String input, ApplicationMetadataDTO dto) {
         Map<String, String> filters = getEffectiveFields().stream()
             .filter(f -> f.isIsIdentifier())
             .map(f -> f.buildFilter(input))
             .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
         dto.setFilters(filters);
-        return dto;
+    }
+
+    private void buildFields(ApplicationMetadataDTO dto) {
+        List<String> fields = getEffectiveFields().stream()
+            .map(f -> f.getName())
+            .collect(Collectors.toList());
+        dto.setFields(fields);
     }
 
     @Override

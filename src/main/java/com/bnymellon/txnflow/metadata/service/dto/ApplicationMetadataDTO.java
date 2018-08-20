@@ -21,7 +21,9 @@ public class ApplicationMetadataDTO implements Serializable {
     private int timeout;
     private int eventCount = 1;
     private List<String> predecessorNodes = new ArrayList<>();
-    private EventRepositoryType eventRepostoryType = EventRepositoryType.DP;
+    // map of node names to actual fields. This is a convenience for usage at the risk of duplication
+    private Map<String, String> predecessorNodesFields = new HashMap<>();
+    private EventRepositoryType eventRepositoryType = EventRepositoryType.DP;
 
     public ApplicationMetadataDTO(String name, int sequence, String indexName, List<String> fields, Map<String, String> filters,
                                   int timeout, List<String> predecessorNodes) {
@@ -40,6 +42,10 @@ public class ApplicationMetadataDTO implements Serializable {
 
     public void setFilters(Map<String, String> filters) {
         this.filters = filters;
+    }
+
+    public void setPredecessorNodesFields(Map<String, String> predecessorNodesFields) {
+        this.predecessorNodesFields = predecessorNodesFields;
     }
 
     public void setPredecessorNodes(List<String> predecessorNodes) {
