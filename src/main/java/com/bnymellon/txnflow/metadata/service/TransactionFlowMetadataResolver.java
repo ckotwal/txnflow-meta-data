@@ -50,6 +50,7 @@ public class TransactionFlowMetadataResolver {
                                                              Map<String, FlowApplicationSequence> nodeToFields) {
         return nodeToFields.values().stream()
             .map(fas -> fas.toDTO(transactionFlowId, 36000, correlationIdFilter))
+            .sorted((dto1, dto2)-> (dto1.getSequence() <= dto2.getSequence()) ? -1: 1)
             .collect(Collectors.toList());
     }
 }
