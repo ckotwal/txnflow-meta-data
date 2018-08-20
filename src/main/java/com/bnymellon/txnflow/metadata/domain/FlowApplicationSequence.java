@@ -137,12 +137,12 @@ public class FlowApplicationSequence implements Serializable {
         return this.getApplication().getFields();
     }
 
-    public ApplicationMetadataDTO toDTO(String input, int timeout) {
+    public ApplicationMetadataDTO toDTO(String input, int timeout, String correlationIdFilter) {
         ApplicationMetadataDTO dto = new ApplicationMetadataDTO(getApplication().getName(),
             getAppSequence(), getApplication().getRepositoryEventName(),
             timeout);
         buildFields(dto);
-        buildFilters(input, dto);
+        buildFilters(input, dto, correlationIdFilter);
         buildPredecessorNodes(dto);
         buildPredecessorNodeFields(dto);
         return dto;
@@ -164,11 +164,20 @@ public class FlowApplicationSequence implements Serializable {
         dto.setPredecessorNodes(new ArrayList(predecessorNodeKeys));
     }
 
-    private void buildFilters(String input, ApplicationMetadataDTO dto) {
+    private void buildFilters(String input, ApplicationMetadataDTO dto, String correlationIdFilter) {
         Map<String, String> filters = getEffectiveFields().stream()
             .filter(f -> f.isIsIdentifier())
             .map(f -> f.buildFilter(input))
             .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+
+        // Given that there is a common flow correlation id, add this to the filter list
+        // with an expected value corresponding to the input.Do this only if the correlation id
+        // is  part of the selected field list and its not already been added
+
+        if(correlationIdFilter != null && dto.getFields().contains(correlationIdFilter)
+            && !filters.containsKey(correlationIdFilter)) {
+            filters.put(correlationIdFilter, input);
+        }
         dto.setFilters(filters);
     }
 

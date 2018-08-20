@@ -52,6 +52,46 @@ public class ApplicationMetadataDTO implements Serializable {
         this.predecessorNodes = predecessorNodes;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getSequence() {
+        return sequence;
+    }
+
+    public String getIndexName() {
+        return indexName;
+    }
+
+    public List<String> getFields() {
+        return fields;
+    }
+
+    public Map<String, String> getFilters() {
+        return filters;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public int getEventCount() {
+        return eventCount;
+    }
+
+    public List<String> getPredecessorNodes() {
+        return predecessorNodes;
+    }
+
+    public Map<String, String> getPredecessorNodesFields() {
+        return predecessorNodesFields;
+    }
+
+    public EventRepositoryType getEventRepositoryType() {
+        return eventRepositoryType;
+    }
+
     public ApplicationMetadataDTO(String name, int sequence, String indexName, int timeout) {
         this.name = name;
         this.sequence = sequence;

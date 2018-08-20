@@ -33,6 +33,7 @@ public class TransactionFlowMetadataResolverTest {
     public static final String FGTM_1 = "fgtm1";
     public static final String FGSP_1 = "fgsp1";
     public static final String FILTER_GSP = "$flow.GTM.1.fgtm1";
+    public static final String CORR_ID = "corrId";
     @Mock
     private TransactionFlowRepository mockFlowRepo;
 
@@ -42,9 +43,9 @@ public class TransactionFlowMetadataResolverTest {
     }
     @Test
     public void resolveMetdataFor() throws Exception {
-        TransactionFlow transactionFlow1 = new TransactionFlow().name("flow1").flowCorrelationId("corrId") ;
+        TransactionFlow transactionFlow1 = new TransactionFlow().name("flow1").flowCorrelationId(CORR_ID) ;
         buildApplicationTransactionFlowWithAppFields(transactionFlow1);
-        TransactionFlow transactionFlow2 = new TransactionFlow().name("flow1").flowCorrelationId("corrId");
+        TransactionFlow transactionFlow2 = new TransactionFlow().name("flow1").flowCorrelationId(CORR_ID);
         buildApplicationTransactionFlowWithOverrideFields(transactionFlow2);
 
         ApplicationMetadataDTO gtmapplicationMetadataDTO = new ApplicationMetadataDTO("GTM",1,
@@ -87,7 +88,10 @@ public class TransactionFlowMetadataResolverTest {
             .repositoryEventName("IDX_GTM");
         ApplicationTransactionField gtmapplicationTransactionField = new ApplicationTransactionField().name(FGTM_1)
             .isIdentifier(true).filterValue("$input");
+        ApplicationTransactionField gtmapplicationTransactionField2 = new ApplicationTransactionField().name(CORR_ID)
+            .isIdentifier(false);
         gtmapplicationTransaction.addField(gtmapplicationTransactionField);
+        gtmapplicationTransaction.addField(gtmapplicationTransactionField2);
 
         FlowApplicationSequence flowApplicationSequence1 = new FlowApplicationSequence().appSequence(1);
         FlowApplicationSequence flowApplicationSequence2 = new FlowApplicationSequence().appSequence(2);
