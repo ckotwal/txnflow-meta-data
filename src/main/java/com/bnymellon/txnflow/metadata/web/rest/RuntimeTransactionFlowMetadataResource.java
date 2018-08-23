@@ -31,7 +31,7 @@ public class RuntimeTransactionFlowMetadataResource {
     private TransactionFlowMetadataResolver transactionFlowMetadataResolver;
 
     public RuntimeTransactionFlowMetadataResource(TransactionFlowMetadataResolver transactionFlowMetadataResolver) {
-        this.transactionFlowMetadataResolver = transactionFlowMetadataResolver
+        this.transactionFlowMetadataResolver = transactionFlowMetadataResolver;
     }
 
     /**

@@ -75,8 +75,10 @@ public class FlowApplicationSequence implements Serializable {
         this.name = name;
     }
 
-    public String getKey() {
+    public String determineKey() {
+        if(application != null)
         return application.getName() + "-" + getAppSequence();
+        else return getAppSequence().toString();
     }
 
     public Set<ApplicationTransactionField> getFields() {

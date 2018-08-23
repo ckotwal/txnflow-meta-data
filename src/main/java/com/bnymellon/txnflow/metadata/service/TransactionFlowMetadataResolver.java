@@ -33,11 +33,11 @@ public class TransactionFlowMetadataResolver {
 
         Map<String, FlowApplicationSequence> nodeToFields = flowWithAppFields.getApplications().stream()
             .collect(
-            Collectors.toMap(FlowApplicationSequence::getKey, fas -> fas));
+            Collectors.toMap(FlowApplicationSequence::determineKey, fas -> fas));
 
         Map<String, FlowApplicationSequence> nodeToOverriddenFields  = flowWithOverrideFields.getApplications().stream()
             .collect(
-            Collectors.toMap(FlowApplicationSequence::getKey, fas -> fas));
+            Collectors.toMap(FlowApplicationSequence::determineKey, fas -> fas));
 
         nodeToFields.putAll(nodeToOverriddenFields);
         return new TransactionFlowMetadataDTO(flowName,buildApplicationDTO(transactionFlowId,
